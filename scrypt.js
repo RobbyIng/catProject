@@ -77,6 +77,7 @@ document.forms.add_cats_form.addEventListener('submit', async (event) => {
   data.favorite = data.favorite == 'on'
 
   const res = await api.addNewCat(data)
+  console.log(res);
   if (res.ok){
     $wrapper.replaceChildren();
     getCatsFunc()
@@ -85,12 +86,13 @@ document.forms.add_cats_form.addEventListener('submit', async (event) => {
   }
   else{
     const responce = await res.json()
-// $formErrorMsg.innerText = responce.message
+    $formErrorMsg.innerText = responce.message
   }
 
 
   event.target.reset() // сброс формы
   $modalAdd.classList.add(HIDDEN_CLASS) // убираем модалку
+  localStorage.removeItem(event.target.name);
 })
 
 document.forms.add_cats_form.addEventListener('reset', async (event) => {
@@ -98,8 +100,8 @@ document.forms.add_cats_form.addEventListener('reset', async (event) => {
   event.preventDefault();
   event.target.reset() // сброс формы
   $modalAdd.classList.add(HIDDEN_CLASS) // убираем модалку
-}
-)
+  localStorage.removeItem(event.target.name);
+})
 const getCatsFunc = async () => {
   const res = await api.getAllCats();
 

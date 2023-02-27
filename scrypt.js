@@ -9,10 +9,11 @@ const generateCatCard = (cat) => {
         <div class="card-body">
           <h5 class="card-title">${cat.name}</h5>
           <p class="card-text">${cat.description}</p>
-          <button type="button" data-action="open" class="btn btn-primary">Open</button>
-          <button type="button" data-action="edit" class="btn btn-warning">Edit</button>
-          <button type="button" data-action="delete" class="btn btn-danger">Delete</button>
-
+          <div class="btn-cont">
+            <button type="button" data-action="open" class="btn btn-primary">Open</button>
+            <button type="button" data-action="edit" class="btn btn-warning">Edit</button>
+            <button type="button" data-action="delete" class="btn btn-danger">Delete</button>
+          </div>
         </div>
       </div>`
   )
@@ -38,7 +39,7 @@ $wrapper.addEventListener('click', async (event) => {
         try {
           const res = await api.getCurrentCat(catId);
           const responce = await res.json();
-        //   if (!res.ok) throw Error(responceOpen.message)
+           if (!res.ok) throw Error(responceOpen.message)
         //   $currentCard.remove()
         console.log(responce);
         } catch (error) {

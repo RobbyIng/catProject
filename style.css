@@ -1,3 +1,6 @@
+.container-lg{
+  margin: 0 0 auto;
+}
 .modal-wrapper {
     height: 100%;
     width: 100%;
@@ -28,4 +31,22 @@
     display: flex;
     justify-content:space-between;
     align-items: center;
+}
+.card-img-top{
+  height: 50%;
+  object-fit: contain
+}
+.error-msg{
+  color: red;
+}
+.d-flex{
+  flex-wrap: wrap;
+}
+.card-body{
+height: 25px;
+}
+.btn-cont{
+  display: flex;
+  justify-content:space-between;
+  align-items: center
 }

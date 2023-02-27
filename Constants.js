@@ -4,6 +4,7 @@ const $wrapper = document.querySelector('[data-wrapper]')
 const $addBtn = document.querySelector('[data-add_button]')
 const $modalAdd = document.querySelector('[data-modal]')
 const $modalInfo = document.querySelector('[info-modal]')
-const $formErrorMsg = document.querySelector('.error')
+const $formErrorMsg = document.querySelector('[data-errmsg]')
+//const $formErrorMsg = document.querySelector('.error')
 
 const HIDDEN_CLASS = 'hidden'

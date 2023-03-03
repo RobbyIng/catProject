@@ -24,7 +24,13 @@
     border-radius: 10px;
   }
   
-  .hidden{
+  .hidden_add{
+    display: none;
+  }
+  .hidden_info{
+    display: none;
+  }
+  .hidden_edit{
     display: none;
   }
 .btnWrapper{
@@ -49,4 +55,11 @@ height: 25px;
   display: flex;
   justify-content:space-between;
   align-items: center
+}
+.picture_info{
+max-height: 300px;
+}
+.littleHeader{
+  color: darkgray;
+  opacity: 0.7;
 }

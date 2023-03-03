@@ -37,23 +37,35 @@ $wrapper.addEventListener('click', async (event) => {
       
       case 'open':
         try {
+          $modalInfo.classList.remove(HIDDEN_INFO) // открываем модалку
           const res = await api.getCurrentCat(catId);
           const responce = await res.json();
-           if (!res.ok) throw Error(responceOpen.message)
-        //   $currentCard.remove()
-        console.log(responce);
-        } catch (error) {
-          console.log(error);
-        }
-        // открывается модалка где расположена подробная информация о коте
-        // должен происходить какой запрос на бек о всей информации о конкретном коте по id
-        // вывести в модальном окне
+
+          if (!res.ok) throw Error(responceOpen.message)
+          $info_cat_name.innerText = responce.name;
+          $info_cat_picture.src = responce.image;
+          $info_cat_id.innerText = String(responce.id);
+          $info_cat_age.innerText = responce.age;
+          $info_cat_rate.innerText = responce.rate;
+          responce.favorite ? $info_cat_favorite.style.color="green" : $info_cat_favorite.style.color="red";
+          $info_cat_description.innerText = responce.description;
+          } catch (error) {
+            console.log(error);
+          }
       break;
 
     case 'edit':
-      // открывается модалка с формой
-      // должен происходить какой запрос на бек о всей информации о конкретном коте по id
-      // форма уже предзаполнена информацией о коте
+      try {
+        const res = await api.getCurrentCat(catId);
+        const responce = await res.json();
+
+        $modalEdit.classList.remove(HIDDEN_EDIT) // открываем модалку
+        if (!res.ok) throw Error(responceOpen.message)
+
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
       break;
 
     default:
@@ -62,10 +74,8 @@ $wrapper.addEventListener('click', async (event) => {
 })
 
 $addBtn.addEventListener('click', () => {
-  $modalAdd.classList.remove(HIDDEN_CLASS) // открываем модалку
+  $modalAdd.classList.remove(HIDDEN_ADD) // открываем модалку
 })
-
-// TODO: addEventListener по закрытию модалки
 
 document.forms.add_cats_form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -78,31 +88,42 @@ document.forms.add_cats_form.addEventListener('submit', async (event) => {
   data.favorite = data.favorite == 'on'
 
   const res = await api.addNewCat(data)
-  console.log(res);
   if (res.ok){
     $wrapper.replaceChildren();
     getCatsFunc()
-    $modalAdd.classList.add(HIDDEN_CLASS)
+    $modalAdd.classList.add(HIDDEN_ADD)
     return event.target.reset()
   }
   else{
     const responce = await res.json()
     $formErrorMsg.innerText = responce.message
   }
-
-
   event.target.reset() // сброс формы
-  $modalAdd.classList.add(HIDDEN_CLASS) // убираем модалку
+  $modalAdd.classList.add(HIDDEN_ADD) // убираем модалку
   localStorage.removeItem(event.target.name);
 })
 
 document.forms.add_cats_form.addEventListener('reset', async (event) => {
-  console.log(event);
   event.preventDefault();
   event.target.reset() // сброс формы
-  $modalAdd.classList.add(HIDDEN_CLASS) // убираем модалку
+  $modalAdd.classList.add(HIDDEN_ADD) // убираем модалку
   localStorage.removeItem(event.target.name);
 })
+document.forms.info_cats_form.addEventListener('reset', async (event) => {
+  event.preventDefault();
+  event.target.reset() // сброс формы
+  $modalInfo.classList.add(HIDDEN_INFO) // убираем модалку
+  localStorage.removeItem(event.target.name);
+})
+document.forms.edit_cats_form.addEventListener('reset', async (event) => {
+  event.preventDefault();
+  event.target.reset() // сброс формы
+  $modalEdit.classList.add(HIDDEN_EDIT) // убираем модалку
+  localStorage.removeItem(event.target.name);
+})
+
+
+$modalInfo.classList.add(HIDDEN_INFO) // убираем модалку
 const getCatsFunc = async () => {
   const res = await api.getAllCats();
 

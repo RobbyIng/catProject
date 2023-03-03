@@ -61,6 +61,8 @@ $wrapper.addEventListener('click', async (event) => {
 
         if (!res.ok) throw Error(responceOpen.message)
         $editForm.querySelector('input[name="id"]').value = responce.id;
+        $editForm.querySelector('input[name="id"]').readOnly = true;
+
         $editForm.querySelector('input[name="name"]').value = responce.name;
         $editForm.querySelector('input[name="image"]').value = responce.image;
         $editForm.querySelector('input[name="age"]').value = responce.age;

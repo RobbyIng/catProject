@@ -128,31 +128,23 @@ document.forms.edit_cats_form.addEventListener('submit', async (event) => {
   data.rate = Number(data.rate)
   data.favorite = data.favorite == 'on'
 
-  try {
-    const res = await api.deleteCat(data.id);
-    const responce = await res.json();
-    if (!res.ok) throw Error(responce.message)
-    $currentCard.remove()
-  } catch (error) {
-    console.log(error);
-  }
-  
-  const resp = await api.addNewCat(data)
+  const res = await api.editCat(data.id,data)
 
-  if (resp.ok){
+  if (res.ok){
     $wrapper.replaceChildren();
     getCatsFunc()
     $modalEdit.classList.add(HIDDEN_EDIT)
     return event.target.reset()
   }
   else {
-    console.log(resp);
-    const respon = await resp.json()
-    $formErrorMsg.innerText = respon.message
+    console.log(res);
+    const responce = await res.json()
+    $formErrorMsg.innerText = responce.message
   }
   event.target.reset() // сброс формы
   $modalEdit.classList.add(HIDDEN_EDIT) // убираем модалку
   localStorage.removeItem(event.target.name);
+  $editForm.querySelector('textarea[name="description"]').innerText = '';
 })
 
 document.forms.add_cats_form.addEventListener('reset', async (event) => {

@@ -27,6 +27,16 @@ class CatsApi {
         body: JSON.stringify(data)
       })
     }
+
+    editCat(id, data) {
+      return fetch(`${this.url}/update/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+    }
   }
   
   const api = new CatsApi(dbName)  

@@ -6,6 +6,7 @@ const $modalAdd = document.querySelector('[data-modal]')
 const $modalInfo = document.querySelector('[info-modal]')
 const $modalEdit = document.querySelector('[edit-modal]')
 const $formErrorMsg = document.querySelector('[data-errmsg]')
+const $editForm = document.forms.edit_cats_form;
 
 const HIDDEN_ADD = 'hidden_add'
 const HIDDEN_INFO = 'hidden_info'

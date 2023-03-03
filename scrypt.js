@@ -37,10 +37,9 @@ $wrapper.addEventListener('click', async (event) => {
       
       case 'open':
         try {
-          $modalInfo.classList.remove(HIDDEN_INFO) // открываем модалку
           const res = await api.getCurrentCat(catId);
           const responce = await res.json();
-
+          
           if (!res.ok) throw Error(responceOpen.message)
           $info_cat_name.innerText = responce.name;
           $info_cat_picture.src = responce.image;
@@ -49,6 +48,7 @@ $wrapper.addEventListener('click', async (event) => {
           $info_cat_rate.innerText = responce.rate;
           responce.favorite ? $info_cat_favorite.style.color="green" : $info_cat_favorite.style.color="red";
           $info_cat_description.innerText = responce.description;
+          $modalInfo.classList.remove(HIDDEN_INFO) // открываем модалку
           } catch (error) {
             console.log(error);
           }
@@ -59,16 +59,30 @@ $wrapper.addEventListener('click', async (event) => {
         const res = await api.getCurrentCat(catId);
         const responce = await res.json();
 
-        $modalEdit.classList.remove(HIDDEN_EDIT) // открываем модалку
         if (!res.ok) throw Error(responceOpen.message)
+        $editForm.querySelector('input[name="id"]').value = responce.id;
+        $editForm.querySelector('input[name="name"]').value = responce.name;
+        $editForm.querySelector('input[name="image"]').value = responce.image;
+        $editForm.querySelector('input[name="age"]').value = responce.age;
+        $editForm.querySelector('input[name="rate"]').value = responce.rate;
+        if (responce.favorite) {
+          $editForm.querySelector('input[name="favorite"]').value = "on";
+          $editForm.querySelector('input[name="favorite"]').checked = true;
+        }
+        else{
+          $editForm.querySelector('input[name="favorite"]').value = "off";
+          $editForm.querySelector('input[name="favorite"]').checked = false;
+        }
+        $editForm.querySelector('textarea[name="description"]').innerText = responce.description;
 
-        console.log(data);
+        $modalEdit.classList.remove(HIDDEN_EDIT) // открываем модалку
+
       } catch (error) {
         console.log(error);
       }
       break;
 
-    default:
+      default:
       break;
   }
 })
@@ -100,6 +114,42 @@ document.forms.add_cats_form.addEventListener('submit', async (event) => {
   }
   event.target.reset() // сброс формы
   $modalAdd.classList.add(HIDDEN_ADD) // убираем модалку
+  localStorage.removeItem(event.target.name);
+})
+document.forms.edit_cats_form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  $formErrorMsg.innerText = '';
+  const data = Object.fromEntries(new FormData(event.target).entries());
+
+  data.id = Number(data.id)
+  data.age = Number(data.age)
+  data.rate = Number(data.rate)
+  data.favorite = data.favorite == 'on'
+
+  try {
+    const res = await api.deleteCat(data.id);
+    const responce = await res.json();
+    if (!res.ok) throw Error(responce.message)
+    $currentCard.remove()
+  } catch (error) {
+    console.log(error);
+  }
+  
+  const resp = await api.addNewCat(data)
+
+  if (resp.ok){
+    $wrapper.replaceChildren();
+    getCatsFunc()
+    $modalEdit.classList.add(HIDDEN_EDIT)
+    return event.target.reset()
+  }
+  else {
+    console.log(resp);
+    const respon = await resp.json()
+    $formErrorMsg.innerText = respon.message
+  }
+  event.target.reset() // сброс формы
+  $modalEdit.classList.add(HIDDEN_EDIT) // убираем модалку
   localStorage.removeItem(event.target.name);
 })
 
